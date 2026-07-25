@@ -7,8 +7,8 @@ import PackageDescription
 let package = Package(
   name: "EmailReadingView",
   platforms: [
-    .macOS(.v10_15),
-    .iOS(.v13),
+    .macOS(.v14),
+    .iOS(.v17),
   ],
   products: [
     // Products define the executables and libraries a package produces,

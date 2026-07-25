@@ -8,7 +8,27 @@ import SwiftUI
 /// A view for an e-mail message's body.
 struct EmailBodyView: View {
   var body: some View {
-    Text(value)
+    // Can't adjust the internal padding of "TextEditor" because its
+    // existing API, "contentMargins," is bugged.
+    // Add it when it's fixed.
+    TextEditor(text: .constant(self.value))
+      .accessibilityLabel("Body")
+      .textEditorStyle(.plain)
+      .monospaced()
+      .overlay {
+        if self.value.isEmpty {
+          ContentUnavailableView {
+            Text("No Text")
+          }
+        } else if self.value.allSatisfy(\.isWhitespace) {
+          ContentUnavailableView {
+            Text("Only Whitespace")
+          } description: {
+            Text("Character selection is still enabled.")
+          }
+          .allowsHitTesting(false)
+        }
+      }
   }
 
   /// Creates a view for the given e-mail body.
@@ -22,6 +42,14 @@ struct EmailBodyView: View {
   let value: String
 }
 
-#Preview {
+#Preview("Visible characters") {
   EmailBodyView(body: "Hello, World!")
+}
+
+#Preview("Empty string") {
+  EmailBodyView(body: "")
+}
+
+#Preview("Only white-space") {
+  EmailBodyView(body: "\t \r\n")
 }
