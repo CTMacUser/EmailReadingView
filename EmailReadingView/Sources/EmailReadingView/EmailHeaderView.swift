@@ -29,7 +29,7 @@ struct EmailHeaderView: View {
   }
 
   /// How to respond to an empty header based off the body.
-  var bodyStatusText: String {
+  var reactionToBodyWhenEmpty: String {
     switch self.bodyRole {
     case .unused:
       "No Header Fields"
@@ -54,7 +54,7 @@ struct EmailHeaderView: View {
       .overlay {
         if self.headerLines.isEmpty {
           ContentUnavailableView {
-            Text(self.bodyStatusText)
+            Text(self.reactionToBodyWhenEmpty)
           }
         }
       }
