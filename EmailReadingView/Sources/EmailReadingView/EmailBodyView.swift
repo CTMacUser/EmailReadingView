@@ -20,7 +20,8 @@ struct EmailBodyView: View {
           ContentUnavailableView {
             Text("No Text")
           }
-        } else if self.value.allSatisfy(\.isWhitespace) {
+        } else if !self.isPrintable
+        {
           ContentUnavailableView {
             Text("Only Whitespace")
           } description: {
@@ -36,10 +37,25 @@ struct EmailBodyView: View {
   /// - Parameter body: The text content of the e-mail body.
   init(body: String) {
     self.value = body
+    self.isPrintable = !body.unicodeScalars.allSatisfy(Self.nonGraphic.contains)
   }
 
   /// The text content of the e-mail body.
   let value: String
+  /// Whether the content has at least one printable character.
+  ///
+  /// This caches a potentially long calculation.
+  let isPrintable: Bool
+
+  /// Codepoints for non-graphic (*i.e.* spacing or control) characters.
+  static let nonGraphic: CharacterSet = {
+    let unofficalSpaces = [0x180E, 0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF]
+      .compactMap(UnicodeScalar.init)
+    var result = CharacterSet(unofficalSpaces)
+    result.formUnion(.whitespacesAndNewlines)
+    result.formUnion(.controlCharacters)
+    return result
+  }()
 }
 
 #Preview("Visible characters") {
