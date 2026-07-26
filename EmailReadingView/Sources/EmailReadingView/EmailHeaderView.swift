@@ -76,11 +76,9 @@ struct EmailHeaderView: View {
   /// - Parameter header: The header key-value pairs.
   ///   An element's key is a header field name,
   ///   and its value is the corresponding field body.
-  /// - Parameter bodyIsNil: Whether if the top-level message body is
-  ///   absent (`nil`) or present (not-`nil`,
-  ///   including an empty string).
-  ///   This determine whether this view will display an empty-header note
-  ///   (not-`nil`) or an empty-message note (`nil`).
+  /// - Parameter bodyRole: How the message's body manifests in the ways this
+  ///   header section needs to know about.
+  ///   This affects the status message of this header when it's empty.
   init(header: Header, bodyRole: BodyRole) {
     self.headerLines = header
     self.bodyRole = bodyRole
