@@ -6,6 +6,7 @@ import PackageDescription
 
 let package = Package(
   name: "EmailReadingView",
+  defaultLocalization: "en",
   platforms: [
     .macOS(.v14),
     .iOS(.v17),

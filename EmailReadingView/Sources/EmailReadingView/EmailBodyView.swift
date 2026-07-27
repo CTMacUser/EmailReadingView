@@ -12,20 +12,39 @@ struct EmailBodyView: View {
     // existing API, "contentMargins," is bugged.
     // Add it when it's fixed.
     TextEditor(text: .constant(self.value))
-      .accessibilityLabel("Body")
+      .accessibilityLabel(
+        LocalizedStringResource(
+          "BODY_LABEL",
+          bundle: #bundle,
+          comment: "The (VoiceOver) label for the body's contents."
+        )
+      )
       .textEditorStyle(.plain)
       .monospaced()
       .overlay {
         if self.value.isEmpty {
           ContentUnavailableView {
-            Text("No Text")
+            Text(
+              "BODY_ZERO_CHARACTERS",
+              bundle: #bundle,
+              comment: "Indicates that the body string has no elements."
+            )
           }
-        } else if !self.isPrintable
-        {
+        } else if !self.isPrintable {
           ContentUnavailableView {
-            Text("Only Whitespace")
+            Text(
+              "BODY_NO_GRAPHIC_CHARACTERS",
+              bundle: #bundle,
+              comment:
+                "Indicates that the body string has no graphic characters."
+            )
           } description: {
-            Text("Character selection is still enabled.")
+            Text(
+              "BODY_SELECT_MESSAGE",
+              bundle: #bundle,
+              comment:
+                "Reminder that non-zero spacing characters can still be selected."
+            )
           }
           .allowsHitTesting(false)
         }

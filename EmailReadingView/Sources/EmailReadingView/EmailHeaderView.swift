@@ -29,16 +29,32 @@ struct EmailHeaderView: View {
   }
 
   /// How to respond to an empty header based off the body.
-  var reactionToBodyWhenEmpty: String {
+  var reactionToBodyWhenEmpty: LocalizedStringResource {
     switch self.bodyRole {
     case .unused:
-      "No Header Fields"
+      .init(
+        "HEADER_EMPTY_NO_BODY",
+        bundle: #bundle,
+        comment: "Empty header for header-only data."
+      )
     case .absent:
-      "No Message Data"
+      .init(
+        "HEADER_EMPTY_NIL_BODY",
+        bundle: #bundle,
+        comment: "Empty header during NIL body."
+      )
     case .present(.empty):
-      "Empty Message"
+      .init(
+        "HEADER_EMPTY_BODY_EMPTY",
+        bundle: #bundle,
+        comment: "Empty header with an empty-string body."
+      )
     case .present(.nonEmpty):
-      "Empty Header"
+      .init(
+        "HEADER_EMPTY_ACTUAL_BODY",
+        bundle: #bundle,
+        comment: "Empty header with a character-laden body."
+      )
     }
   }
 

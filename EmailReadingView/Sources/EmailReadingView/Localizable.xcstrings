@@ -1,0 +1,94 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "BODY_LABEL" : {
+      "comment" : "The (VoiceOver) label for the body's contents.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Body"
+          }
+        }
+      }
+    },
+    "BODY_NO_GRAPHIC_CHARACTERS" : {
+      "comment" : "Indicates that the body string has no graphic characters.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Printable Characters"
+          }
+        }
+      }
+    },
+    "BODY_SELECT_MESSAGE" : {
+      "comment" : "Reminder that non-zero spacing characters can still be selected.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Character selection is still enabled.)"
+          }
+        }
+      }
+    },
+    "BODY_ZERO_CHARACTERS" : {
+      "comment" : "Indicates that the body string has no elements.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Text"
+          }
+        }
+      }
+    },
+    "HEADER_EMPTY_ACTUAL_BODY" : {
+      "comment" : "Empty header with a character-laden body.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empty Header"
+          }
+        }
+      }
+    },
+    "HEADER_EMPTY_BODY_EMPTY" : {
+      "comment" : "Empty header with an empty-string body.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empty Message"
+          }
+        }
+      }
+    },
+    "HEADER_EMPTY_NIL_BODY" : {
+      "comment" : "Empty header during NIL body.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Message Data"
+          }
+        }
+      }
+    },
+    "HEADER_EMPTY_NO_BODY" : {
+      "comment" : "Empty header for header-only data.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Header Fields"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.2"
+}
