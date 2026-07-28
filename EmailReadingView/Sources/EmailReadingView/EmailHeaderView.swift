@@ -74,11 +74,6 @@ struct EmailHeaderView: View {
           }
         }
       }
-
-      if case .present = self.bodyRole {
-        Divider()
-          .padding(.horizontal)
-      }
     }
   }
 
@@ -134,7 +129,7 @@ struct EmailHeaderView: View {
   )
 }
 
-#Preview("Long field body") {
+#Preview("Long field body, part 1") {
   EmailHeaderView(
     header: [
       "Summary": """
@@ -146,7 +141,9 @@ struct EmailHeaderView: View {
   )
 }
 
-#Preview("Long field body, with body divider") {
+#Preview("Long field body, part 2") {
+  // This used to be "Long field body, with body divider",
+  // but I moved the divider to the body's view (where it's unconditional).
   EmailHeaderView(
     header: [
       "Summary": """
