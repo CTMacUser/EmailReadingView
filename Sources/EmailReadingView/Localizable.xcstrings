@@ -45,46 +45,35 @@
         }
       }
     },
-    "HEADER_EMPTY_ACTUAL_BODY" : {
-      "comment" : "Empty header with a character-laden body.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empty Header"
-          }
-        }
-      }
-    },
-    "HEADER_EMPTY_BODY_EMPTY" : {
-      "comment" : "Empty header with an empty-string body.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empty Message"
-          }
-        }
-      }
-    },
-    "HEADER_EMPTY_NIL_BODY" : {
-      "comment" : "Empty header during NIL body.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Message Data"
-          }
-        }
-      }
-    },
-    "HEADER_EMPTY_NO_BODY" : {
-      "comment" : "Empty header for header-only data.",
+    "HEADER_EMPTY" : {
+      "comment" : "Empty header",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "No Header Fields"
+          }
+        }
+      }
+    },
+    "MESSAGE_EMPTY" : {
+      "comment" : "Empty header with an empty-string body.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Content"
+          }
+        }
+      }
+    },
+    "MESSAGE_MISSING" : {
+      "comment" : "Empty header during NIL body.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Data"
           }
         }
       }

@@ -8,9 +8,6 @@ import SwiftUI
 /// A view for an e-mail message's body.
 struct EmailBodyView: View {
   var body: some View {
-    Divider()
-      .padding()
-
     // Can't adjust the internal padding of "TextEditor" because its
     // existing API, "contentMargins," is bugged.
     // Add it when it's fixed.

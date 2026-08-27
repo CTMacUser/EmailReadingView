@@ -7,115 +7,48 @@ import SwiftUI
 
 /// A view for an e-mail message's header section.
 struct EmailHeaderView: View {
-  /// A type alias for the header section's lines.
-  typealias Header = EmailReadingView._Header
-
-  /// How the message's body will be handled.
-  enum BodyRole {
-    /// Whether or not the message body, if any, contains characters.
-    enum bodyCount {
-      /// The body is empty.
-      case empty
-      /// The body contains at least one character.
-      case nonEmpty
-    }
-
-    /// The message body is not used in this view.
-    case unused
-    /// The message has a `nil` body.
-    case absent
-    /// The message actually has a body, which may be empty.
-    case present(length: bodyCount)
-  }
-
-  /// How to respond to an empty header based off the body.
-  var reactionToBodyWhenEmpty: LocalizedStringResource {
-    switch self.bodyRole {
-    case .unused:
-      .init(
-        "HEADER_EMPTY_NO_BODY",
-        bundle: #bundle,
-        comment: "Empty header for header-only data."
-      )
-    case .absent:
-      .init(
-        "HEADER_EMPTY_NIL_BODY",
-        bundle: #bundle,
-        comment: "Empty header during NIL body."
-      )
-    case .present(.empty):
-      .init(
-        "HEADER_EMPTY_BODY_EMPTY",
-        bundle: #bundle,
-        comment: "Empty header with an empty-string body."
-      )
-    case .present(.nonEmpty):
-      .init(
-        "HEADER_EMPTY_ACTUAL_BODY",
-        bundle: #bundle,
-        comment: "Empty header with a character-laden body."
-      )
-    }
-  }
-
   var body: some View {
     VStack {
       List(self.headerLines.indices, id: \.self) {
         LabeledContent(
-          self.headerLines[$0].key.localizedCapitalized,
-          value: self.headerLines[$0].value
+          self.headerLines[$0].name.localizedCapitalized,
+          value: self.headerLines[$0].body
         )
         .textSelection(.enabled)
       }
       .overlay {
         if self.headerLines.isEmpty {
           ContentUnavailableView {
-            Text(self.reactionToBodyWhenEmpty)
+            Text("HEADER_EMPTY", bundle: #bundle, comment: "Empty header")
           }
         }
       }
     }
   }
 
+  /// A type alias for the header section's lines.
+  typealias Header = InternetMessageDTO.HeaderSection
+
   /// The header section's lines.
   let headerLines: Header
-  /// How this header will treat the body.
-  let bodyRole: BodyRole
 
   /// Creates an view for the given e-mail header.
   ///
   /// - Parameter header: The header key-value pairs.
   ///   An element's key is a header field name,
   ///   and its value is the corresponding field body.
-  /// - Parameter bodyRole: How the message's body manifests in the ways this
-  ///   header section needs to know about.
-  ///   This affects the status message of this header when it's empty.
-  init(header: Header, bodyRole: BodyRole) {
+  init(header: Header) {
     self.headerLines = header
-    self.bodyRole = bodyRole
   }
 }
 
-#Preview("Empty Header and Body") {
-  EmailHeaderView(header: [:], bodyRole: .present(length: .empty))
-}
-
-#Preview("Empty Header with Non-empty Body") {
-  EmailHeaderView(header: [:], bodyRole: .present(length: .nonEmpty))
-}
-
-#Preview("No Data, Message Context") {
-  EmailHeaderView(header: [:], bodyRole: .absent)
-}
-
-#Preview("No Data, Header-only Context") {
-  EmailHeaderView(header: [:], bodyRole: .unused)
+#Preview("Empty Header") {
+  EmailHeaderView(header: [:])
 }
 
 #Preview("One field") {
   EmailHeaderView(
-    header: ["Subject": "This is a test."],
-    bodyRole: .present(length: .empty)
+    header: ["Subject": "This is a test."]
   )
 }
 
@@ -124,40 +57,23 @@ struct EmailHeaderView: View {
     header: [
       "From": "gwashington@whitehouse.gov",
       "To": "jadams@whitehouse.gov",
-    ],
-    bodyRole: .present(length: .nonEmpty)
+    ]
   )
 }
 
-#Preview("Long field body, part 1") {
+#Preview("Long field body") {
   EmailHeaderView(
     header: [
       "Summary": """
       A123456789 B123456789 C123456789 \
       D123456789 E123456789 F123456789 G123456789
       """
-    ],
-    bodyRole: .present(length: .empty)
-  )
-}
-
-#Preview("Long field body, part 2") {
-  // This used to be "Long field body, with body divider",
-  // but I moved the divider to the body's view (where it's unconditional).
-  EmailHeaderView(
-    header: [
-      "Summary": """
-      A123456789 B123456789 C123456789 \
-      D123456789 E123456789 F123456789 G123456789
-      """
-    ],
-    bodyRole: .present(length: .nonEmpty)
+    ]
   )
 }
 
 #Preview("Case-normalized Header field names") {
   EmailHeaderView(
-    header: ["reference".lowercased(): "A123456789 b123456789"],
-    bodyRole: .present(length: .empty)
+    header: ["rEFErENCE".lowercased(): "A123456789 b123456789"]
   )
 }

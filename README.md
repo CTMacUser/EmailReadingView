@@ -56,7 +56,7 @@ struct MyEmailView: View {
     let content = "This is the content of the e-mail."
 
     var body: some View {
-        EmailReadingView(header: headers, body: content)
+        EmailReadingView(InternetMessageDTO(header: headers, body: content))
     }
 }
 ```

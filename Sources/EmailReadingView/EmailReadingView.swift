@@ -7,94 +7,103 @@ import SwiftUI
 
 /// A view that displays an e-mail message, its header and body sections.
 public struct EmailReadingView: View {
-  /// A type alias for the storage of header lines.
-  public typealias _Header = KeyValuePairs<String, String>
+  /// The message to be displayed.
+  let message: InternetMessageDTO
+  /// A cache of the visual mode to use.
+  let topLevelNotice: Text?
 
   public var body: some View {
-    VStack {
-      EmailHeaderView(
-        header: self.headerSection,
-        bodyRole: self.isHeaderOnly
-          ? .unused
-          : self.bodySection.map {
-            .present(length: $0.isEmpty ? .empty : .nonEmpty)
-          } ?? .absent
-      )
-
-      if let actualBody = self.bodySection,
-        !actualBody.isEmpty || !self.headerSection.isEmpty
-      {
-        EmailBodyView(body: actualBody)
+    VSplitView {
+      EmailHeaderView(header: self.message.header)
+      if let bodyString = self.message.body {
+        EmailBodyView(body: bodyString)
+      }
+    }
+    .opacity(topLevelNotice == nil ? 1 : 0)
+    .overlay {
+      if let topLevelNotice {
+        ContentUnavailableView {
+          topLevelNotice
+        }
       }
     }
   }
 
-  /// The header lines of the e-mail.
-  public let headerSection: _Header
-  /// The body content of the e-mail.
-  public let bodySection: String?
-  /// Whether this view is for a full message or only header data.
-  let isHeaderOnly: Bool
-
-  /// Creates a view for the given message header section.
-  ///
-  /// This is for data sources that are defined to be just a header.
-  ///
-  /// - Parameter onlyHeader: The header field lines.
-  ///   For each line, the key is the field name,
-  ///   and the value its corresponding field body.
-  public init(onlyHeader: _Header) {
-    self.headerSection = onlyHeader
-    self.bodySection = nil
-    self.isHeaderOnly = true
-  }
-  /// Creates a view for the given e-mail message.
-  ///
-  /// - Parameters:
-  ///   - header: The header field lines.
-  ///     For each line, the key is the field name,
-  ///     and the value its corresponding field body.
-  ///   - body: The body content of the e-mail.
-  ///     Does not have to exist.
-  ///     (A `nil` body is distinct from an empty body.)
-  public init(header: _Header, body: String?) {
-    self.headerSection = header
-    self.bodySection = body
-    self.isHeaderOnly = false
+  /// Creates a view of the given message.
+  init(_ message: InternetMessageDTO) {
+    self.message = message
+    self.topLevelNotice =
+      if message.header.isEmpty {
+        switch message.body?.isEmpty {
+        case true:
+          Text(
+            "MESSAGE_EMPTY",
+            bundle: #bundle,
+            comment: "Empty header with an empty-string body."
+          )
+        case false:
+          nil
+        case nil:
+          Text(
+            "MESSAGE_MISSING",
+            bundle: #bundle,
+            comment: "Empty header during NIL body."
+          )
+        }
+      } else {
+        nil
+      }
   }
 }
 
-#Preview("Header-only: empty") {
-  EmailReadingView(onlyHeader: [:])
+let emptyHeaderNilBody = InternetMessageDTO(header: [:], body: nil)
+#Preview("Empty header, NIL body (i.e. no actual data)") {
+  EmailReadingView(emptyHeaderNilBody)
 }
 
-#Preview("Header-only: not empty") {
-  EmailReadingView(onlyHeader: ["Summary": "Is this a test?"])
+let fullHeaderNilBody = InternetMessageDTO(
+  header: ["Summary": "Is this a test?"],
+  body: nil
+)
+#Preview("Nonempty header, NIL body (i.e. header-only)") {
+  EmailReadingView(fullHeaderNilBody)
 }
 
-#Preview("Message: empty header, no body (i.e. no actual data)") {
-  EmailReadingView(header: [:], body: nil)
+let emptyHeaderEmptyBody = InternetMessageDTO(header: [:], body: "")
+#Preview("Empty header, empty body (i.e. blank data)") {
+  EmailReadingView(emptyHeaderEmptyBody)
 }
 
-#Preview("Message: empty header, empty body") {
-  EmailReadingView(header: [:], body: "")
+let fullHeaderEmptyBody = InternetMessageDTO(
+  header: ["Subject": "This is not a test."],
+  body: ""
+)
+#Preview("Nonempty header, empty body") {
+  EmailReadingView(fullHeaderEmptyBody)
 }
 
-#Preview("Message: empty header, non-empty body") {
-  EmailReadingView(header: [:], body: "Hello, World!")
+let emptyHeaderFullBody = InternetMessageDTO(header: [:], body: "Hello, World!")
+#Preview("Empty header, nonempty body") {
+  EmailReadingView(emptyHeaderFullBody)
 }
 
-#Preview("Message: non-empty header, no body") {
-  EmailReadingView(header: ["Subject": "This is a test."], body: nil)
+let fullHeaderFullBody = InternetMessageDTO(
+  header: ["From": "tjefferson@whitehouse.gov"],
+  body: "This is a message."
+)
+#Preview("Nonempty header, nonempty body") {
+  EmailReadingView(fullHeaderFullBody)
 }
 
-#Preview("Message: non-empty header, empty body") {
-  EmailReadingView(header: ["Subject": "This is not a test."], body: "")
+let emptyHeaderSpacedBody = InternetMessageDTO(header: [:], body: "  \r\n\t ")
+#Preview("Empty header, whitespace-only body") {
+  EmailReadingView(emptyHeaderSpacedBody)
 }
 
-#Preview("Message: non-empty header, non-empty body") {
-  EmailReadingView(
-    header: ["From": "tjefferson@whitehouse.gov"],
-    body: "This is a message."
-  )
+let fullHeaderSpacedBody = InternetMessageDTO(
+  header: ["Summary": "This is a test."],
+  body: "\r\n \t  "
+)
+#Preview("Nonempty header, whitespace-only body") {
+  EmailReadingView(fullHeaderSpacedBody)
 }
